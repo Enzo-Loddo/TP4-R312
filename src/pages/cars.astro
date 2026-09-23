@@ -1,0 +1,82 @@
+---
+import Layout from "../layouts/Layout.astro";
+import cars from "../assets/cars.json";
+
+const allBrands = [...new Set(cars.map(car => car.brand))].sort();
+---
+<Layout>
+  <div class="max-w-5xl mx-auto py-8 px-4">
+    
+    <!-- En-tête de la page -->
+    <div class="mb-8 border-b border-gray-200 pb-6">
+      <a href="/" class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-4 transition-colors">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Retour au menu
+      </a>
+      <h1 class="text-3xl font-extrabold text-gray-900">Dataset : Voitures (Cars)</h1>
+      <p class="text-gray-500 mt-2">Observez le ratio entre la puissance (Horsepower) et la consommation (MPG).</p>
+    </div>
+    
+    <!-- Zone des contrôles (Filtres) -->
+    <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 mb-6 shadow-sm flex flex-wrap items-center gap-4">
+      <label for="brandFiltre" class="text-gray-700 font-semibold">Filtrer par marque :</label>
+      <div class="relative">
+        <select name="brandFiltre" id="brandFiltre" class="appearance-none bg-white border border-gray-300 text-gray-700 py-2 pl-4 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all cursor-pointer shadow-sm">
+          <option value="">Toutes les marques</option>
+          {allBrands.map(brand => (
+            <option value={brand}>{brand}</option>
+          ))}
+        </select>
+        <!-- Petite flèche personnalisée pour le select -->
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone du graphique -->
+    <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 overflow-x-auto text-black">
+      <div id="plot-container" class="min-w-[600px]"></div>
+    </div>
+
+  </div>
+
+  <script>
+    import * as Plot from "@observablehq/plot";
+    import cars from "../assets/cars.json";
+
+    const selectBrand = document.querySelector("#brandFiltre");
+    const divContainer = document.querySelector("#plot-container");
+
+    function renderPlot() {
+      const selectedBrand = selectBrand.value;
+      divContainer.innerHTML = "";
+
+      const plot = Plot.plot({
+        grid: true,
+        inset: 10,
+        width: 900,
+        height: 500,
+        x: { label: "Puissance (Horsepower) →" },
+        y: { label: "↑ Consommation (MPG)" },
+        color: { legend: true, label: "Origine" },
+        marks: [
+          Plot.dot(cars, {
+            filter: (d) => d.horsepower !== "NA" && d.mpg !== "NA" && (selectedBrand === "" || d.brand === selectedBrand),
+            x: (d) => +d.horsepower, 
+            y: (d) => +d.mpg,
+            stroke: "origin",
+            title: "name",
+            r: 5, // Agrandit légèrement les points
+            fillOpacity: 0.7 // Ajoute un peu de transparence
+          }),
+        ],
+      });
+      
+      divContainer.append(plot);
+    };
+
+    selectBrand.addEventListener("change", renderPlot);
+    renderPlot();
+  </script>
+</Layout>

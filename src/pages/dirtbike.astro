@@ -1,0 +1,73 @@
+---
+import Layout from "../layouts/Layout.astro";
+import dirtbikes from "../assets/dirtbikes.json";
+
+const allBrands = [...new Set(dirtbikes.map(bike => bike.manufacture))].sort();
+---
+<Layout>
+  <div class="max-w-5xl mx-auto py-8 px-4">
+    <div class="mb-8 border-b border-gray-200 pb-6">
+      <a href="/" class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-4 transition-colors">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Retour au menu
+      </a>
+      <h1 class="text-3xl font-extrabold text-gray-900">Dataset : Dirtbikes</h1>
+      <p class="text-gray-500 mt-2">Analyse des prix et cylindrées des motos tout-terrain.</p>
+    </div>
+    
+    <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 mb-6 shadow-sm flex flex-wrap items-center gap-4">
+      <label for="manufacture" class="text-gray-700 font-semibold">Marque :</label>
+      <div class="relative">
+        <select name="manufacture" id="manufacture" class="appearance-none bg-white border border-gray-300 text-gray-700 py-2 pl-4 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all cursor-pointer shadow-sm">
+          <option value="">Toutes les marques</option>
+          {allBrands.map(brand => (
+            <option value={brand}>{brand}</option>
+          ))}
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 overflow-x-auto text-black">
+      <div id="plot-container" class="min-w-[600px]"></div>
+    </div>
+  </div>
+
+  <script>
+    import * as Plot from "@observablehq/plot";
+    import dirtbikes from "../assets/dirtbikes.json";
+
+    const selectManufacture = document.querySelector("#manufacture");
+    const divContainer = document.querySelector("#plot-container");
+
+    function renderPlot() {
+      const brand = selectManufacture.value;
+      
+      divContainer.innerHTML = "";
+
+      const plot = Plot.plot({
+        grid: true,
+        inset: 10,
+        x: { label: "Cylindrée (cc)" },
+        y: { label: "Prix (MSRP $)" },
+        color: { legend: true },
+        marks: [
+          Plot.dot(dirtbikes, {
+            x: (d) => +d.displacement, 
+            y: (d) => +d.msrp,
+            stroke: "manufacture",
+            title: "model",
+            filter: (d) => brand === "" || d.manufacture === brand
+          }),
+        ],
+      });
+      
+      divContainer.append(plot);
+    };
+
+    selectManufacture.addEventListener("change", renderPlot);
+    renderPlot();
+  </script>
+</Layout>

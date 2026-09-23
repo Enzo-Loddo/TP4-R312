@@ -1,21 +1,47 @@
 ---
-import PlotFigure from "../components/PlotFigure.astro";
 import Layout from "../layouts/Layout.astro";
-import * as Plot from "@observablehq/plot";
-import penguins from "../assets/penguins.json";
 ---
-
 <Layout>
-  <h1 class="text-2xl">Test Astro et Plot (Observablehq)</h1>
-  <PlotFigure
-    options={{
-      marks: [
-        Plot.dot(penguins, {
-          x: "culmen_length_mm",
-          y: "culmen_depth_mm",
-          stroke: "species",
-        }),
-      ],
-    }}
-  />
+  <div class="max-w-4xl mx-auto py-10 px-4">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-4">
+        Exploration de Données
+      </h1>
+      <p class="text-gray-500 text-lg">Sélectionnez un jeu de données pour visualiser les graphiques interactifs avec Observable Plot.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <a href="/simple" class="group block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">1. Essai Simple</h2>
+        <p class="text-gray-500 text-sm">Génération d'un graphique aléatoire basique.</p>
+      </a>
+
+      <a href="/simple-penguin" class="group block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">2. Simple Penguin</h2>
+        <p class="text-gray-500 text-sm">Affichage brut des caractéristiques des manchots.</p>
+      </a>
+
+      <a href="/penguin-filtre" class="group block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">3. Penguin avec filtre</h2>
+        <p class="text-gray-500 text-sm">Graphique des manchots avec filtrage par espèce.</p>
+      </a>
+
+      <a href="/penguin-multifiltres" class="group block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">4. Penguin multi-filtres</h2>
+        <p class="text-gray-500 text-sm">Filtrage avancé par espèce, île et sexe.</p>
+      </a>
+
+      <a href="/dirtbike" class="group block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">5. Essai Dirtbike</h2>
+        <p class="text-gray-500 text-sm">Analyse des prix et cylindrées des motos tout-terrain.</p>
+      </a>
+
+      <a href="/cars" class="group block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">6. Essai Cars</h2>
+        <p class="text-gray-500 text-sm">Étude de la consommation et de la puissance automobile.</p>
+      </a>
+
+    </div>
+  </div>
 </Layout>

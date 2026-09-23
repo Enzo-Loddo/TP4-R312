@@ -1,0 +1,28 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout>
+  <div class="max-w-5xl mx-auto py-8 px-4">
+    <div class="mb-8 border-b border-gray-200 pb-6">
+      <a href="/" class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-4 transition-colors">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Retour au menu
+      </a>
+      <h1 class="text-3xl font-extrabold text-gray-900">Essai Simple</h1>
+      <p class="text-gray-500 mt-2">Génération d'un graphique aléatoire basique.</p>
+    </div>
+
+    <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 overflow-x-auto text-black">
+      <div id="plot-container" class="min-w-[600px]"></div>
+    </div>
+  </div>
+
+  <script>
+    import * as Plot from "@observablehq/plot";
+
+    const plot = Plot.rectY({length: 10000}, Plot.binX({y: "count"}, {x: Math.random})).plot();
+    
+    const div = document.querySelector("#plot-container");
+    div.append(plot);
+  </script>
+</Layout>
